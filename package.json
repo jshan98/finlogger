@@ -1,0 +1,27 @@
+{
+  "name": "finlogger",
+  "version": "1.0.0",
+  "description": "FinLogger Application",
+  "homepage": "https://github.com/jshan98/finlogger#readme",
+  "bugs": {
+    "url": "https://github.com/jshan98/finlogger/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jshan98/finlogger.git"
+  },
+  "license": "ISC",
+  "author": "jshan98 (Joseph Shanahan)",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "mongoose": "^9.5.0"
+  }
+}
