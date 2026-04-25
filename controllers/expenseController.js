@@ -115,3 +115,74 @@ export const deleteExpense = (req, res) => {
         res.status(500).json({error: "Server error."});
     });
 };
+
+/**
+ * Function: getExpenses
+ * Description: gets all the expense details from the Mongo database
+ * @param {*} req 
+ * @param {*} res
+ */
+export const getExpenses = (req, res) => {
+    // Extracts fields from the query string
+    const {userId, month} = req.query;
+    // Initializes empty date range filter
+    let dateFilter = {};
+    // If month is provided, create date range filte
+    if(month) {
+        const [year, monthPart] = month.split('-');
+        // Start date
+        const startDate = new Date(Date.UTC(year, monthPart - 1, 1, 0, 0, 0));
+        // End date
+        const endDate = new Date(Date.UTC(year, monthPart, 0, 23, 59, 59)); 
+        // Set date for rangeFilter
+        dateFilter = {date:{$gte:startDate, $lte:endDate}};
+        console.log(startDate, endDate);
+    }
+
+    //Prepares user filter
+    let userFilter = {};
+    if(userId){
+        userFilter = {user_id: userId};
+    }
+    // Finds and aggregates the expenses
+    Expense.aggregate([
+        {
+            $match: {
+                 ...dateFilter,
+                 ...userFilter
+            },
+        },
+        {
+            $lookup: {
+                from: "expense_categories",
+                localField: "category_id",
+                foreignField: "_id",
+                as: "category",
+            },
+        },
+        {
+            $unwind: "$category",
+        },
+        {
+            $project: {
+                date: 1,
+                amount: 1,
+                description: 1,
+                categoryName: "$category.name",
+            }
+        },
+    ])
+    .sort({date: -1})
+    .then(expenses => {
+        // Calculate the sum of all expenses
+        const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+        // Creates JSON Object with total expenses and expenses array
+        const expenseJsonWithTotal = {totalExpenses, expenses};
+
+        res.status(200).json(expenseJsonWithTotal);
+    })
+    .catch (error => {
+        console.error("Error fetching expenses: ", error);
+        res.status(500).json({error: "Server error"});
+    });
+};
