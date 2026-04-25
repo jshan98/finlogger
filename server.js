@@ -9,8 +9,8 @@ app.use(cors()); // Allows for cross-origin requests
 app.use(bodyParser.json()) // parses the JSON request body
 
 mongoose.connect('mongodb://localhost:27017/finlogger/?directConnection=true', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+    //useNewUrlParser: true, // Not supported by MongoDB
+    //useUnifiedTopology: true // Not supported by MongoDB
 })
 .then(() => console.log('Connected to MongoDB Server'))
 .catch(error => console.error(`Error connecting to MongoDB Server: ${error}`));
