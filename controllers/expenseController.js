@@ -9,7 +9,7 @@ import ExpenseCategory from "../models/expenseCategory.js";
  * @param {*} req 
  * Returns: Creates a new expense within the Mongo database if successful. Otherwise returns appropriate error and status codes.
  */
-export const createExpense = (res, req) => {
+export const createExpense = (req, res) => {
     // Extracts fields from the request body
     const {user_id, description, amount, date, categoryName} = req.body;
 
