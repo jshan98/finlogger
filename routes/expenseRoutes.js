@@ -8,6 +8,7 @@ const router = express.Router();
 router.post('/', expenseController.createExpense); // Route for createExpense function
 router.put('/:id', expenseController.updateExpense); // Route for updateExpense function
 router.delete('/:id', expenseController.deleteExpense); // Route for deleteExpense function
-router.get('/', expenseController.getExpenses); // get expenses
+router.get('/', expenseController.getExpenses); // Route for getExpenses function
+router.get('/summary', expenseController.getExpenseSummary); // Route for getExpenseSummary function
 
 export default router;

@@ -4,10 +4,10 @@ import ExpenseCategory from "../models/expenseCategory.js";
 
 /**
  * Function: createExpense
- * Description: Takes the response and request body as params and creates a new expense within the Mongo database
+ * Description: Takes the response and request body as params and creates a new expense within the finlogger database
  * @param {*} res 
  * @param {*} req 
- * Returns: Creates a new expense within the Mongo database if successful. Otherwise returns appropriate error and status codes.
+ * Returns: Creates a new expense within the finlogger database if successful. Otherwise returns appropriate error and status codes.
  */
 export const createExpense = (req, res) => {
     // Extracts fields from the request body
@@ -51,10 +51,10 @@ export const createExpense = (req, res) => {
 
 /**
  * Function: updateExpense
- * Description: Takes the request and response body as params and updates an existing expense within the Mongo database
+ * Description: Takes the request and response body as params and updates an existing expense within the finlogger database
  * @param {*} req 
  * @param {*} res
- * Returns:  Updates an existing expense within the Mongo database. Otherwise returns the appropriate error and status codes.
+ * Returns:  Updates an existing expense within the finlogger database. Otherwise returns the appropriate error and status codes.
  */
 export const updateExpense = (req, res) => {
     // Extracts required fields from request body
@@ -91,7 +91,7 @@ export const updateExpense = (req, res) => {
 
 /**
  * Function: deleteExpense
- * Description: Deletes an existing expense from the Mongo database.
+ * Description: Deletes an existing expense from the finlogger database.
  * @param {*} req 
  * @param {*} res 
  * Returns: If the expense to be deleted does not exist then returns the appropriate error and status codes.
@@ -118,7 +118,7 @@ export const deleteExpense = (req, res) => {
 
 /**
  * Function: getExpenses
- * Description: gets all the expense details from the Mongo database
+ * Description: gets all the expense details from the finlogger database
  * @param {*} req 
  * @param {*} res
  */
@@ -172,7 +172,7 @@ export const getExpenses = (req, res) => {
             }
         },
     ])
-    .sort({date: -1})
+    .sort({date: -1}) // Sorts in descending order
     .then(expenses => {
         // Calculate the sum of all expenses
         const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
@@ -180,6 +180,114 @@ export const getExpenses = (req, res) => {
         const expenseJsonWithTotal = {totalExpenses, expenses};
 
         res.status(200).json(expenseJsonWithTotal);
+    })
+    .catch (error => {
+        console.error("Error fetching expenses: ", error);
+        res.status(500).json({error: "Server error"});
+    });
+};
+
+/**
+ * Function: getExpenseSummary
+ * Description: gets the summary data from the finlogger database
+ * @param {*} req 
+ * @param {*} res 
+ */
+export const getExpenseSummary = (req, res) => {
+    // Extracts required fields from query string
+    const {userId, month} = req.query;
+    // Initializes empty date range filter
+    let dateFilter = {};
+    // If month is provided, create date range filte
+    if(month) {
+        const [year, monthPart] = month.split('-');
+        // Start date
+        const startDate = new Date(Date.UTC(year, monthPart - 1, 1, 0, 0, 0));
+        // End date
+        const endDate = new Date(Date.UTC(year, monthPart, 0, 23, 59, 59)); 
+        // Set date for rangeFilter
+        dateFilter = {date:{$gte:startDate, $lte:endDate}};
+        console.log(startDate, endDate);
+    }
+
+    //Prepares user filter
+    let userFilter = {};
+    if(userId){
+        userFilter = {user_id: userId};
+    }
+    // Finds and aggregates the expenses
+    Expense.aggregate([
+        {
+            $match: {
+                 ...userFilter,
+                 ...dateFilter,
+            },
+        },
+        {
+            $lookup: {
+                from: "expense_categories",
+                localField: "category_id",
+                foreignField: "_id",
+                as: "category",
+            },
+        },
+        {
+            $unwind: "$category",
+        },
+        {
+            $group: {
+                _id: "$category_id",
+                categoryName: {$first: "$category.name"},
+                categoryExpense: {$sum: "$amount"},
+            },
+        },
+        {
+            $group: {
+                _id: null,
+                totalExpense:{$sum: "$categoryExpense"},
+                categories: {
+                    $push: {
+                        category_id: "$_id",
+                        categoryName: "$categoryName",
+                        categoryExpense: "$categoryExpense",
+                    },
+                },
+            },
+        },
+        {
+            $project: {
+                _id: 0,
+                categories: {
+                    $map: {
+                        input: "$categories",
+                        as: "cat",
+                        in: {
+                            categoryName: "$$cat.categoryName",
+                            percentage: {
+                                $multiply: [
+                                    {$divide:["$$cat.categoryExpense", "$totalExpense"]},
+                                    100,
+                                ],
+                            }
+                        },
+                    },
+                },
+            },
+        },
+        {
+            $unwind: "$categories",
+        },
+        {
+            $replaceRoot: {newRoot: "$categories"},
+        },
+    ])
+    .sort({categoryName: 1}) // Sorts in ascending order
+    .then(expenseSummary => {
+        // Formats the percentage to 2 decimal places
+        expenseSummary.forEach((ex) => {
+            ex.percentage = `${ex.percentage.toFixed(2)}%`;
+        });
+        res.status(200).json(expenseSummary);
     })
     .catch (error => {
         console.error("Error fetching expenses: ", error);
