@@ -18,7 +18,7 @@ export const createExpense = (req, res) => {
     // If the category does not exist then returns the 400 status code with error message
     .then(category => {
         if(!category) {
-            return res.status(400).json({error: 'Category not found.'});
+            return res.status(404).json({error: 'Category not found.'});
         }
 
         // Creates the new expense
@@ -64,7 +64,7 @@ export const updateExpense = (req, res) => {
     .then(category => {
         // If the category does not then returns status code 400 with error message
         if(!category) {
-            return res.status(400).json({error: 'Category not found.'});
+            return res.status(404).json({error: 'Category not found.'});
         }
         // Finds and updates the existing expense
         return Expense.findByIdAndUpdate(req.params.id, {
@@ -85,6 +85,33 @@ export const updateExpense = (req, res) => {
     .catch(error => {
         // Returns the status code 500 with error message
         console.error("Error updating expense: ", error);
+        res.status(500).json({error: "Server error."});
+    });
+};
+
+/**
+ * Function: deleteExpense
+ * Description: Deletes an existing expense from the Mongo database.
+ * @param {*} req 
+ * @param {*} res 
+ * Returns: If the expense to be deleted does not exist then returns the appropriate error and status codes.
+ */
+export const deleteExpense = (req, res) => {
+    Expense.findByIdAndDelete(req.params.id)
+    .then(expense => {
+        // If the category does not then returns status code 400 with error message
+        if(!expense) {
+            return res.status(404).json({error: 'Expense not found.'});
+        }
+        // Returns the status code 200 with message
+        return res.status(200).json({
+            message: "Expense deleted successfully.",
+            deletedExpense: expense
+        });
+    })
+    .catch(error => {
+        // Returns the status code 500 with error message
+        console.error("Error deleting expense: ", error);
         res.status(500).json({error: "Server error."});
     });
 };
