@@ -2,16 +2,14 @@ import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import expenseRoutes from './routes/expenseRoutes';
+import expenseRoutes from './routes/expenseRoutes.js';
 
 const app = express();
 app.use(cors()); // Allows for cross-origin requests
-app.use(bodyParser.json()) // parses the JSON request body
+app.use(bodyParser.json()); // parses the JSON request body
+//app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/finlogger/?directConnection=true', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.connect('mongodb://localhost:27017/finlogger')
 .then(() => console.log('Connected to MongoDB Server'))
 .catch(error => console.error(`Error connecting to MongoDB Server: ${error}`));
 

@@ -7,7 +7,7 @@ const expenseSchema = new mongoose.Schema({
     amount: Number,
     date: Date,
     category_id: {type: String, ref: "ExpenseCategory", required:true},
-},{collection: expenses});
+});
 
 const Expense = mongoose.model('Expense', expenseSchema); // Creates model using expenseSchema
 
