@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import Expense from "../model/expense";
-import ExpenseCategory from "../model/expenseCategory";
+import Expense from "../models/expense.js";
+import ExpenseCategory from "../models/expenseCategory.js";
 
 /**
  * Function: createExpense

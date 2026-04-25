@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import expenseRoutes from './routes/expenseRoutes';
+import expenseRoutes from './routes/expenseRoutes.js';
 
 const app = express();
 app.use(cors()); // Allows for cross-origin requests
