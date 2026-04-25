@@ -6,5 +6,6 @@ import * as expenseCategoryController from '../controllers/expenseCategoryContro
 const router = express.Router();
 
 router.post('/', expenseController.createExpense); // Route for createExpense function
+router.put('/:id', expenseController.updateExpense); // Route for updateExpense function
 
 export default router;

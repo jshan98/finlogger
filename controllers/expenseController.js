@@ -48,3 +48,38 @@ export const createExpense = (req, res) => {
         }
     });
 };
+
+/**
+ * Function: updateExpense
+ * Description:
+ * @param {*} req 
+ * @param {*} res
+ * Returns:  
+ */
+export const updateExpense = (req, res) => {
+    // Extracts required fields from request body
+    const {description, amount, date, categoryName} = req.body;
+
+    ExpenseCategory.findOne({name: categoryName})
+    .then(category => {
+        if(!category) {
+            return res.status(400).json({error: 'Category not found.'});
+        }
+        return Expense.findByIdAndUpdate(req.params.id, {
+            description,
+            amount,
+            date,
+            category_id: category._id
+        }, {new: true});
+    })
+    .then(updatedExpense => {
+        if(!updatedExpense){
+            return res.status(404).json({error: "Expense not found."});
+        }
+        return res.status(200).json({message: "Expense updated successfully."});
+    })
+    .catch(error => {
+        console.error("Error updating expense: ", error);
+        res.status(500).json({error: "Server error."});
+    });
+};
