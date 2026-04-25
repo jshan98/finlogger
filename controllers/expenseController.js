@@ -59,16 +59,13 @@ export const createExpense = (req, res) => {
 export const updateExpense = (req, res) => {
     // Extracts required fields from request body
     const {description, amount, date, categoryName} = req.body;
-
     // Finds the category by name
     ExpenseCategory.findOne({name: categoryName})
     .then(category => {
-
         // If the category does not then returns status code 400 with error message
         if(!category) {
             return res.status(400).json({error: 'Category not found.'});
         }
-
         // Finds and updates the existing expense
         return Expense.findByIdAndUpdate(req.params.id, {
             description,
@@ -78,17 +75,14 @@ export const updateExpense = (req, res) => {
         }, {new: true}); // Returns the updated document
     })
     .then(updatedExpense => {
-
         // If the updated expense does not exist then returns the status code 404 with error message
         if(!updatedExpense){
             return res.status(404).json({error: "Expense not found."});
         }
-
         // Returns the status code 200 with message
         return res.status(200).json({message: "Expense updated successfully."});
     })
     .catch(error => {
-        
         // Returns the status code 500 with error message
         console.error("Error updating expense: ", error);
         res.status(500).json({error: "Server error."});
