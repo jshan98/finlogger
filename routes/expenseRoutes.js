@@ -10,5 +10,6 @@ router.put('/:id', expenseController.updateExpense); // Route for updateExpense 
 router.delete('/:id', expenseController.deleteExpense); // Route for deleteExpense function
 router.get('/', expenseController.getExpenses); // Route for getExpenses function
 router.get('/summary', expenseController.getExpenseSummary); // Route for getExpenseSummary function
+router.get('/categories', expenseCategoryController.getAllExpenseCategories); // Route for getAllExpenseCategories function
 
 export default router;
