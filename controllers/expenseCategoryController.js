@@ -1,0 +1,1 @@
+import ExpenseCategory from '../models/expenseCategory.js';
