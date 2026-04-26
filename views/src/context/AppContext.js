@@ -1,7 +1,7 @@
 // AppContext.js
 
 import { createContext, useContext, useState, useEffect } from "react";
-import { expenseData, expenseSummaryData as summaryData, expenseCategories as categoriesData } from '../data';
+// import { expenseData, expenseSummaryData as summaryData, expenseCategories as categoriesData } from '../data';
 import ToastNotification from "../components/ToastNotification";
 
 // Create a new context for the app
@@ -14,6 +14,7 @@ export const AppProvider = ({ children }) => {
     const [totalExpenses, setTotalExpenses] = useState(0);
     const [expenseCategories, setExpenseCategories] = useState(null);
     const [expenseIdToBeDeleted, setExpenseIdToBeDeleted] = useState(null);
+
     // Sets the state variable that controls the toast notification
     const [toast, setToast] = useState({show: false, message: ""});
 
@@ -29,15 +30,66 @@ export const AppProvider = ({ children }) => {
 
     // Function to fetch expense categories data from the API
     const fetchExpenseCategories = async () => {
-        let categoriesData
-        setExpenseCategories(categoriesData.categories);
+        try {
+            // API call to fetch expense categories
+            const response = await fetch("http://localhost:3001/expenses/categories");
+
+            // Checks if the received response is okay (ok), if not then throws an error.
+            if(!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            // Parses the response data as JSON
+            const data = await response.json();
+
+            // Updates the state with the fetched categories.
+            setExpenseCategories(data);
+        } catch (error) {
+            // Logs any errors that may occur during the fetch
+            console.error("Error fetching Expense Categories: ", error);
+        }
     }
 
     // Function to fetch expense & summary data from the API
     const fetchExpenseData = async () => {
-        setExpenseSummaryData(summaryData);
-        setTotalExpenses(expenseData.totalExpenses);
-        setExpenseDetailsData(expenseData.expenses);
+        try {
+            // API call to fetch expense summary data for a specific month
+            const responseSummary = await fetch(`http://localhost:3001/expenses/summary?userId=USER_1&month=${month}`);
+
+            // Checks if the received responseSummary is okay (ok), if not then throws an error.
+            if(!responseSummary.ok) {
+                throw new Error(`HTTP error! Status: ${responseSummary.status}`);
+            }
+
+            // Parses the response data as JSON
+            const dataSummary = await responseSummary.json();
+
+            // Updates the state with the fetched summary and details.
+            setExpenseSummaryData(dataSummary);
+        } catch (error) {
+            // Logs any errors that may occur during the fetch
+            console.error("Error fetching Expense Categories: ", error);
+        }
+
+        try {
+            // API call to fetch expense details data for a specific month
+            const responseDetails = await fetch(`http://localhost:3001/expenses/?userId=USER_1&month=${month}`);
+
+            // Checks if the received responseDetails is okay (ok), if not then throws an error.
+             if (!responseDetails.ok){
+                throw new Error(`HTTP error! Status: ${responseDetails.status}`);
+            }
+
+            // Parses the response data as JSON
+            const dataDetails = await responseDetails.json();
+
+            // Updates the state with the fetched details.
+            setExpenseDetailsData(dataDetails);
+            setTotalExpenses(dataDetails.totalExpenses);
+        } catch (error) {
+            // Logs any errors that may occur during the fetch
+            console.error("Error fetching Expense Categories: ", error);
+        }
     }
 
     // fetch expense & summary data on initial load and when the month changes
