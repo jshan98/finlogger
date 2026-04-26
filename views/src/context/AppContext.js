@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 import { expenseData, expenseSummaryData as summaryData, expenseCategories as categoriesData } from '../data';
+import ToastNotification from "../components/ToastNotification";
 
 // Create a new context for the app
 const AppContext = createContext();
@@ -13,9 +14,22 @@ export const AppProvider = ({ children }) => {
     const [totalExpenses, setTotalExpenses] = useState(0);
     const [expenseCategories, setExpenseCategories] = useState(null);
     const [expenseIdToBeDeleted, setExpenseIdToBeDeleted] = useState(null);
+    // Sets the state variable that controls the toast notification
+    const [toast, setToast] = useState({show: false, message: ""});
+
+    // Function to show toast notification
+    const showToast = (message) => {
+        setToast({show: true, message: message});
+    }
+
+    // Function to hide toast notification
+    const hideToast = () => {
+        setToast({show: false, message: ""});
+    }
 
     // Function to fetch expense categories data from the API
     const fetchExpenseCategories = async () => {
+        let categoriesData
         setExpenseCategories(categoriesData.categories);
     }
 
@@ -47,9 +61,12 @@ export const AppProvider = ({ children }) => {
                 expenseIdToBeDeleted,
                 setMonth,
                 setExpenseIdToBeDeleted,
-                fetchExpenseData
+                fetchExpenseData,
+                showToast,
             }} >
             {children}
+            {/* Renders ToastNotification component */}
+            <ToastNotification show={toast.show} message={toast.message} onClose={hideToast} />
         </AppContext.Provider>
     );
 };
