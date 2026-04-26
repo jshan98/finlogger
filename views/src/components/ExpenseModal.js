@@ -3,6 +3,7 @@ import { useExpenseModal } from "../context/ExpenseModalContext";
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useState } from "react";
 import { useAppContext } from '../context/AppContext';
+import { response } from "express";
 /**
  * Function: ExpensesModal
  * Description: Acts as the functional side of the ExpenseModal functional component. Handles submissions, expense edits, and JSX. 
@@ -10,9 +11,14 @@ import { useAppContext } from '../context/AppContext';
  * @returns JSX for the ExpenseModal component
  */
 function ExpenseModal() {
+    // Destructures modal-related state & methods from custom hook
     const {showModal, modalMode, modalData, handleClose} = useExpenseModal();
+    // Local state for managing form validation
     const [validated, setValidated] = useState(false);
+    // Destructures methods & date from app context
+    const {expenseCategories, fetchExpenseData, showToast} = useAppContext();
 
+    // Maps through expense categories to create options for the categories select dropdown
     const categories = expenseCategories.categories.map((item) => {
         return (
             <option value={item} key={item}>
@@ -25,17 +31,54 @@ function ExpenseModal() {
     const handleSubmit = (event) => {
         const form = document.getElementById("expenseForm");
         
-        event.preventDefault();
-        event.stopPropagation();
+        event.preventDefault(); // Prevents default form submission behavior
+        event.stopPropagation(); // Stops propagation of the event
+        setValidated(true); // Sets validation state to true
 
         if(form.checkValidity() === false){
-            setValidated(true);
-            return;
-        } else {
-            setValidated(false);
-        }
+            console.log("Form is invalid");
+            return; // Exit if form is invalid
 
-        handleClose();
+        setValidated(false); // Sets validation state to false
+
+        // Prepares expense data for API call
+        const expenseData = {
+            user_id: "USER_1",
+            description: document.getElementById("expenseForm.description"),
+            amount: parseFloat(document.getElementsById("expenseForm.amount")),
+            date: document.getElementById("expenseForm.date"),
+            categoryName: document.getElementById("expenseForm.categoryName")
+        };
+
+        // Sets API URL & method based on modalMode
+        const apiURL = modalMode === "add" ? "http://localhost:3001/expenses" :
+                                            `http://localhost:3001/expenses/${modalData._id}`
+        const method = modalMode === "add" ? "POST" : "PUT";
+
+        // Makes API call to add or edit expense
+        fetch(apiURL, {
+            method: method,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(expenseData),
+        })
+        .then(response => {
+            if(!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(result => {
+            console.log(modalMode === "add" ? "Expense submitted successfully: " : "Expense saved successfully: ", expenseData.categoryName);
+            showToast(modalMode === "add" ? "Expense submitted successfully!" : "Expense saved successfully!");
+            fetchExpenseData();
+            handleClose();
+        })
+        .catch (error => {
+            console.error(modalMode === "add" ? "Error submitting expense: " : "Error saving expense: ", error);
+            showToast(modalMode === "add" ? "Error submitting expense!" : "Error saving expense!");
+        });
     };
 
     return (
