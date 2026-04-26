@@ -1,7 +1,8 @@
 import { expenseCategories } from "../data";
-import { useExpenseModalContext } from "../context/ExpenseModalContext";
+import { useExpenseModal } from "../context/ExpenseModalContext";
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useState } from "react";
+import { useAppContext } from '../context/AppContext';
 /**
  * Function: ExpensesModal
  * Description: Acts as the functional side of the ExpenseModal functional component. Handles submissions, expense edits, and JSX. 
@@ -9,7 +10,7 @@ import { useState } from "react";
  * @returns JSX for the ExpenseModal component
  */
 function ExpenseModal() {
-    const {showModal, modalMode, modalData, handleClose} = useExpenseModalContext();
+    const {showModal, modalMode, modalData, handleClose} = useExpenseModal();
     const [validated, setValidated] = useState(false);
 
     const categories = expenseCategories.categories.map((item) => {

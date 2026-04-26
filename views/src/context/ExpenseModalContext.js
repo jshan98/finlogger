@@ -51,6 +51,6 @@ export const ExpenseModalProvider = ({ children }) => {
 };
 
 // Custom hook to use ExpenseModalContext in other components
-export const useExpenseModalContext = () => {
+export const useExpenseModal = () => {
     return useContext(ExpenseModalContext);
 };
