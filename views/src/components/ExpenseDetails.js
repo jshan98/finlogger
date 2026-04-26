@@ -3,7 +3,6 @@ import DeleteConfirmationModal from './DeleteConfirmationModal';
 import { useExpenseModal } from "../context/ExpenseModalContext";
 import { useAppContext } from "../context/AppContext";
 import { useState } from "react";
-import { response } from "express";
 
 /**
  * Function: updateDateFormat
@@ -12,10 +11,12 @@ import { response } from "express";
  * @returns formatted date (MM/DD/DayOfTheWeek)
  */
 function updateDateFormat(date){
+    //console.log(`Unupdated Date Format: ${date}`);
     const d1 = new Date(date);
     const month = d1.toLocaleString("en-us", {month:"short"});
-    const day = d1.getDate();
+    const day = d1.getDate()+1;
     const dayOfWeek = d1.toLocaleString("en-us", {weekday:"short"});
+    //console.log(`Updated Date Format: ${month} ${day}, ${dayOfWeek}`);
     return (`${month} ${day}, ${dayOfWeek}`); //Note to self: use => ` <= with date formats and not => ' <= (Addendum: arrows are only for emphasis)
 }
 
@@ -27,7 +28,7 @@ function updateDateFormat(date){
  */
 function ExpenseDetails({data}){
     const { handleShow } = useExpenseModal();
-    const { ExpenseIdToBeDeleted, setExpenseIdToBeDeleted, fetchExpenseData, showToast} = useAppContext();
+    const { expenseIdToBeDeleted, setExpenseIdToBeDeleted, fetchExpenseData, showToast} = useAppContext();
     const [showDM, setShowDM] = useState(false);
 
     const handleEdit = (event, expense) => {
@@ -36,10 +37,11 @@ function ExpenseDetails({data}){
     };
 
     const handleDMShow = (event, expenseId) => {
+        //console.log(`Expense ID: ${expenseId}`);
         event.preventDefault();
         setShowDM(true);
         setExpenseIdToBeDeleted(expenseId);
-    } ;
+    };
 
     const handleDMClose = () => {
         setShowDM(false);
@@ -47,7 +49,8 @@ function ExpenseDetails({data}){
     
     // Handles the deletion of an expense
     const handleDelete = () => {
-        fetch(`http://localhoast:3001/expenses/${ExpenseIdToBeDeleted}`, {
+        //console.log(`Expense ID to be Deleted: ${expenseIdToBeDeleted}`);
+        fetch(`http://localhost:3001/expenses/${expenseIdToBeDeleted}`, {
             method: 'DELETE'
         })
         .then(response => {
@@ -68,11 +71,12 @@ function ExpenseDetails({data}){
         .finally(() => {
             setExpenseIdToBeDeleted(null); // Resets expenseIdToBeDeleted
             handleDMClose(); // Closes modal window
-        })
+        });
     };
     
-
-    const tableItems = data.map((expense) => {
+    //console.log(`Object value:${Object.values(data)}`);
+    const tableItems = Object.values(data.expenses).map((expense) => {
+        //console.log("Date from expense: " + expense.date);
         return (
             <tr key={expense._id} >
                 <td className="text-nowrap">{updateDateFormat(expense.date)}</td>

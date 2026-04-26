@@ -30,7 +30,7 @@ function AppContent() {
       <ExpenseModalProvider>
         <Container fluid='lg'>
             <div>
-              <Overview month={month} handleMonthChange={handleMonthChange} totalExpenses={totalExpenses} userIncome={user.income}/>
+              <Overview month={month} handleMonthChange={handleMonthChange} totalExpenses={totalExpenses} userIncome={1500}/>
             </div>
           <Row className='tbl-container'>
             {/* Will render ExpenseSummary if expenseSummaryData exists */}

@@ -21,12 +21,13 @@ export const AppProvider = ({ children }) => {
     // Function to show toast notification
     const showToast = (message) => {
         setToast({show: true, message: message});
-    }
+    };
 
     // Function to hide toast notification
     const hideToast = () => {
+        console.log("I was told to close");
         setToast({show: false, message: ""});
-    }
+    };
 
     // Function to fetch expense categories data from the API
     const fetchExpenseCategories = async () => {
@@ -48,7 +49,7 @@ export const AppProvider = ({ children }) => {
             // Logs any errors that may occur during the fetch
             console.error("Error fetching Expense Categories: ", error);
         }
-    }
+    };
 
     // Function to fetch expense & summary data from the API
     const fetchExpenseData = async () => {
@@ -90,12 +91,12 @@ export const AppProvider = ({ children }) => {
             // Logs any errors that may occur during the fetch
             console.error("Error fetching Expense Categories: ", error);
         }
-    }
+    };
 
     // fetch expense & summary data on initial load and when the month changes
     useEffect(() => {
         fetchExpenseData();
-    }, [month]);
+    });
 
     // fetch expense categories data when the month changes
     useEffect(() => {
@@ -118,7 +119,7 @@ export const AppProvider = ({ children }) => {
             }} >
             {children}
             {/* Renders ToastNotification component */}
-            <ToastNotification show={toast.show} message={toast.message} onClose={hideToast} />
+            {/* <ToastNotification show={toast.show} message={toast.message} onClose={hideToast} /> */}
         </AppContext.Provider>
     );
 };
