@@ -3,6 +3,7 @@ import DeleteConfirmationModal from './DeleteConfirmationModal';
 import { useExpenseModalContext } from "../context/ExpenseModalContext";
 import { useAppContext } from "../context/AppContext";
 import { useState } from "react";
+import { response } from "express";
 
 /**
  * Function: updateDateFormat
@@ -26,29 +27,49 @@ function updateDateFormat(date){
  */
 function ExpenseDetails({data}){
     const { handleShow } = useExpenseModalContext();
-    const { setExpenseIdToBeDeleted } = useAppContext();
+    const { ExpenseIdToBeDeleted, setExpenseIdToBeDeleted, fetchExpenseData, showToast} = useAppContext();
     const [showDM, setShowDM] = useState(false);
 
     const handleEdit = (event, expense) => {
         event.preventDefault();
         handleShow("edit", expense);
-    }
+    };
 
     const handleDMShow = (event, expenseId) => {
         event.preventDefault();
         setShowDM(true);
         setExpenseIdToBeDeleted(expenseId);
-    } 
+    } ;
 
     const handleDMClose = () => {
         setShowDM(false);
-    }
-
-    {/* Left intentionally empty until next stage of project */}
+    };
     
+    // Handles the deletion of an expense
     const handleDelete = () => {
-        console.log("Delete Selected");
-    }
+        fetch(`http://localhoast:3001/expenses/${ExpenseIdToBeDeleted}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to delete expense! Response status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            fetchExpenseData(); // Refreshes expense data
+            showToast("Expense Deleted Successfully!"); // Shows Toast notification with successful message
+            console.log("Item deleted", data);
+        })
+        .catch(error => {
+            console.error('Error deleting expense ', error);
+            showToast('Error deleting expense!'); // Shows Toast notification with error message
+        })
+        .finally(() => {
+            setExpenseIdToBeDeleted(null); // Resets expenseIdToBeDeleted
+            handleDMClose(); // Closes modal window
+        })
+    };
     
 
     const tableItems = data.map((expense) => {
