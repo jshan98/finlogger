@@ -1,4 +1,4 @@
-import { expenseCategories } from "../data";
+// import { expenseCategories } from "../data";
 import { useExpenseModal } from "../context/ExpenseModalContext";
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useState } from "react";
