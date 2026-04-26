@@ -1,9 +1,9 @@
 import OverviewCard from "./OverviewCard";
 import {Button, Row,  Col, Form} from 'react-bootstrap';
-import {useExpenseModalContext} from '../context/ExpenseModalContext';
+import {useExpenseModal} from '../context/ExpenseModalContext';
 
 function Overview({month, handleMonthChange, totalExpenses, userIncome}) {
-    const { handleShow } = useExpenseModalContext();
+    const { handleShow } = useExpenseModal();
 
     return(
         <div>

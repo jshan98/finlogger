@@ -6,7 +6,7 @@ import ExpenseSummary from './components/ExpenseSummary';
 import ExpenseDetails from './components/ExpenseDetails';
 import { ExpenseModalProvider } from './context/ExpenseModalContext';
 import { Container, Row } from 'react-bootstrap';
-import { user } from "./data";
+// import { user } from "./data";
 import { AppProvider, useAppContext } from './context/AppContext';
 
 /**

@@ -1,6 +1,6 @@
 import { Table, Col } from "react-bootstrap";
 import DeleteConfirmationModal from './DeleteConfirmationModal';
-import { useExpenseModalContext } from "../context/ExpenseModalContext";
+import { useExpenseModal } from "../context/ExpenseModalContext";
 import { useAppContext } from "../context/AppContext";
 import { useState } from "react";
 import { response } from "express";
@@ -26,7 +26,7 @@ function updateDateFormat(date){
  * @returns JSX for ExpenseDetails component
  */
 function ExpenseDetails({data}){
-    const { handleShow } = useExpenseModalContext();
+    const { handleShow } = useExpenseModal();
     const { ExpenseIdToBeDeleted, setExpenseIdToBeDeleted, fetchExpenseData, showToast} = useAppContext();
     const [showDM, setShowDM] = useState(false);
 
