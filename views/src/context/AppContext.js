@@ -21,12 +21,13 @@ export const AppProvider = ({ children }) => {
     // Function to show toast notification
     const showToast = (message) => {
         setToast({show: true, message: message});
+        console.log("Toast shown");
     };
 
     // Function to hide toast notification
     const hideToast = () => {
-        console.log("I was told to close");
         setToast({show: false, message: ""});
+        console.log("Toast hidden");
     };
 
     // Function to fetch expense categories data from the API
@@ -65,7 +66,7 @@ export const AppProvider = ({ children }) => {
             // Parses the response data as JSON
             const dataSummary = await responseSummary.json();
 
-            // Updates the state with the fetched summary and details.
+            // Updates the state with the fetched summary.
             setExpenseSummaryData(dataSummary);
         } catch (error) {
             // Logs any errors that may occur during the fetch
@@ -74,7 +75,7 @@ export const AppProvider = ({ children }) => {
 
         try {
             // API call to fetch expense details data for a specific month
-            const responseDetails = await fetch(`http://localhost:3001/expenses/?userId=USER_1&month=${month}`);
+            const responseDetails = await fetch(`http://localhost:3001/expenses?userId=USER_1&month=${month}`);
 
             // Checks if the received responseDetails is okay (ok), if not then throws an error.
              if (!responseDetails.ok){
@@ -96,7 +97,9 @@ export const AppProvider = ({ children }) => {
     // fetch expense & summary data on initial load and when the month changes
     useEffect(() => {
         fetchExpenseData();
-    });
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [month]);
 
     // fetch expense categories data when the month changes
     useEffect(() => {
@@ -118,8 +121,8 @@ export const AppProvider = ({ children }) => {
                 showToast,
             }} >
             {children}
-            {/* Renders ToastNotification component */}
-            {/* <ToastNotification show={toast.show} message={toast.message} onClose={hideToast} /> */}
+            {/* Renders the Toast Notification component */}
+            <ToastNotification show={toast.show} message={toast.message} onClose={(hideToast)} />
         </AppContext.Provider>
     );
 };

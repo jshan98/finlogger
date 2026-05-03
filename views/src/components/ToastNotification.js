@@ -13,7 +13,7 @@ const ToastNotification = (show, message, onClose) => {
         <ToastContainer position='top-end' className='p-3'>
             <Toast onClose={onClose} show={show} delay={3000} autohide>
                 <Toast.Header>
-                    <strong className='me-auto'>Notification</strong> {/* Header with strong title */}
+                    <strong className="me-auto">Notification</strong> {/* Header with strong title */}
                 </Toast.Header>
                 <Toast.Body>{message}</Toast.Body> {/* Body to display Toast Notification message */}
             </Toast>

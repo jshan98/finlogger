@@ -27,8 +27,8 @@ function updateDateFormat(date){
  * @returns JSX for ExpenseDetails component
  */
 function ExpenseDetails({data}){
-    const { handleShow } = useExpenseModal();
     const { expenseIdToBeDeleted, setExpenseIdToBeDeleted, fetchExpenseData, showToast} = useAppContext();
+    const { handleShow } = useExpenseModal();
     const [showDM, setShowDM] = useState(false);
 
     const handleEdit = (event, expense) => {

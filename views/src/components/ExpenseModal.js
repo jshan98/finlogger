@@ -45,22 +45,38 @@ function ExpenseModal() {
         const expenseData = {
             user_id: "USER_1",
             description: document.getElementById("expenseForm.description"),
-            amount: parseFloat(document.getElementById("expenseForm.amount")),
+            amount: document.getElementById("expenseForm.amount"),
             date: document.getElementById("expenseForm.dateInput"),
             categoryName: document.getElementById("expenseForm.category")
         };
 
         // Sets API URL & method based on modalMode
-        const apiURL = modalMode === "add" ? "http://localhost:3001/expenses" : `http://localhost:3001/expenses/${modalData._id}`;
+        const apiURL = modalMode === "add" ? "http://localhost:3001/expenses/" : `http://localhost:3001/expenses/${modalData._id}`;
         const method = modalMode === "add" ? "POST" : "PUT";
 
         // Makes API call to add or edit expense
+        console.log(apiURL);
+        console.log(`Expense data - User ID: ${expenseData.user_id}, 
+               Description: ${expenseData.description.value}, 
+               Amount: $${parseFloat(expenseData.amount.value)}, 
+               Date: ${expenseData.date.value}, 
+               Category Name: ${expenseData.categoryName.value}`
+        );
+
+        const bodyExpenseData = {
+            user_id: expenseData.user_id, 
+            description: expenseData.description.value, 
+            amount: parseFloat(expenseData.amount.value), 
+            date: expenseData.date.value, 
+            categoryName: expenseData.categoryName.value
+        };
+
         fetch(apiURL, {
             method: method,
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(expenseData.value),
+            body: JSON.stringify(bodyExpenseData),
         })
         .then(response => {
             if(!response.ok) {
@@ -137,6 +153,7 @@ function ExpenseModal() {
                         <Form.Label>Amount</Form.Label>
                         <Form.Control 
                             type="number"
+                            step={0.01}
                             placeholder="Enter amount"
                             required
                             defaultValue={modalMode === "add" ? "" : modalData.amount}
