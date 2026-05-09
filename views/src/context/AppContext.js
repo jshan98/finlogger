@@ -21,13 +21,13 @@ export const AppProvider = ({ children }) => {
     // Function to show toast notification
     const showToast = (message) => {
         setToast({show: true, message: message});
-        console.log("Toast shown");
+        console.log(`Toast shown - Message: ${message}, Show: ${toast.show}`);
     };
 
     // Function to hide toast notification
     const hideToast = () => {
         setToast({show: false, message: ""});
-        console.log("Toast hidden");
+        console.log(`Toast hidden - Show: ${toast.show}`);
     };
 
     // Function to fetch expense categories data from the API

@@ -11,7 +11,7 @@ import {Toast, ToastContainer} from 'react-bootstrap'; // Imports Toast & ToastC
 const ToastNotification = (show, message, onClose) => {
     return (
         <ToastContainer position='top-end' className='p-3'>
-            <Toast onClose={onClose} show={show} delay={3000} autohide>
+            <Toast onClose={onClose} show={show} data-bs-delay={3000} data-bs-autohide={true}>
                 <Toast.Header>
                     <strong className="me-auto">Notification</strong> {/* Header with strong title */}
                 </Toast.Header>

@@ -55,13 +55,14 @@ function ExpenseModal() {
         const method = modalMode === "add" ? "POST" : "PUT";
 
         // Makes API call to add or edit expense
+        /*
         console.log(apiURL);
         console.log(`Expense data - User ID: ${expenseData.user_id}, 
                Description: ${expenseData.description.value}, 
                Amount: $${parseFloat(expenseData.amount.value)}, 
                Date: ${expenseData.date.value}, 
                Category Name: ${expenseData.categoryName.value}`
-        );
+        );*/
 
         const bodyExpenseData = {
             user_id: expenseData.user_id, 

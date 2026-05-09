@@ -61,7 +61,7 @@ function ExpenseDetails({data}){
         })
         .then(data => {
             fetchExpenseData(); // Refreshes expense data
-            showToast("Expense Deleted Successfully!"); // Shows Toast notification with successful message
+            showToast("Expense deleted successfully!"); // Shows Toast notification with successful message
             console.log("Item deleted", data);
         })
         .catch(error => {
