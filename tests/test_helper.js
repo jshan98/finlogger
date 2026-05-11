@@ -24,5 +24,5 @@ beforeEach(async () => {
 after(async () => {
     await mongoose.disconnect();
     await mongoServer.stop();
-    console.log('MongoDB instance released');
+    console.log('MongoDB instance released.');
 });
