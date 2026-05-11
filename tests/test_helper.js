@@ -21,7 +21,7 @@ beforeEach(async () => {
 });
 
 // Cleans up after tests have concluded
-after(async => {
+after(async () => {
     await mongoose.disconnect();
     await mongoServer.stop();
     console.log('MongoDB instance released');
