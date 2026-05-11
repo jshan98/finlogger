@@ -38,4 +38,22 @@ describe('Expense Controller', () => {
         // Checks that response body contains 'Expense created successfully'.
         expect(res.body.message).to.equal('Expense created successfully.');
     });
+
+    // Test case for the create expense API failure
+    it('Should return 400 if required validation fails', async () => {
+        // Creates category for the expense.
+        const category = await ExpenseCategory.create({_id: "HOUSING", name: 'Housing'}); 
+        const res = await request(app)
+            .post('/expenses')
+            .send({
+                user_id: 'USER_2',
+                amount: 100,
+                date: '2020-07-01',
+                categoryName: 'Housing'
+            });
+        // Validates API response.
+        expect(res.status).to.equal(400);
+        // Checks that response body contains 'Expense created successfully'.
+        expect(res.body.error).to.equal('Validation Failed.');
+    });
 });
