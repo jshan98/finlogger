@@ -11,4 +11,21 @@ describe('Expense Modal', () => {
     beforeEach(async () => {
         category = await ExpenseCategory.create({_id:"FOOD", name:'Food'});
     });
+
+    // Test case: Checks if an expense can be created successfully
+    it('Should create an expense successfully', async () => {
+        const expense = new Expense({
+            user_id: 'USER_2',
+            description: 'Lunch',
+            amount: 10,
+            date: new Date(),
+            category_id: category._id
+        });
+
+        const savedExpense = await expense.save();
+
+        expect(savedExpense._id).to.exist; // Checks that the expense has an ID, indicating it was saved successfully
+        expect(savedExpense.user_id).to.equal('USER_2'); // Check that the user ID matches USER_2
+
+    });
 });
