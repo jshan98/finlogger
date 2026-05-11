@@ -56,4 +56,29 @@ describe('Expense Controller', () => {
         // Checks that response body contains 'Expense created successfully'.
         expect(res.body.error).to.equal('Validation Failed.');
     });
+
+    // Test case for the update expense API success
+    it('Should update an expense', async () => {
+        // Creates category for the expense.
+        const category = await ExpenseCategory.create({_id: "TRANSPORT", name: 'Transport'}); 
+        const expense = await Expense.create({
+                user_id: 'USER_2',
+                description: 'Bus',
+                amount: 5,
+                date: '2020-07-08',
+                category_id: 'Transport'
+            });
+        const res = await request(app)
+            .put(`/expenses/${expense._id}`)
+            .send({
+                description: 'Train',
+                amount: 15,
+                date: '2020-07-09',
+                categoryName: 'Transport'
+            });
+        // Validates API response.
+        expect(res.status).to.equal(200);
+        // Checks that response body contains 'Expense created successfully'.
+        expect(res.body.message).to.equal('Expense updated successfully.');
+    });
 });
