@@ -19,5 +19,23 @@ app.get('/expense-summary', getExpenseSummary);
 
 // Test suite for expense controller
 describe('Expense Controller', () => {
-    
+
+    // Test case for the create expense API success
+    it('Should create an expense', async () => {
+        // Creates category for the expense.
+        const category = await ExpenseCategory.create({_id: "EDUCATION", name: 'Education'}); 
+        const res = await request(app)
+            .post('/expenses')
+            .send({
+                user_id: 'USER_2',
+                description: 'Fees',
+                amount: 70,
+                date: '2020-07-08',
+                categoryName: 'Education'
+            });
+        // Validates API response.
+        expect(res.status).to.equal(201);
+        // Checks that response body contains 'Expense created successfully'.
+        expect(res.body.message).to.equal('Expense created successfully.');
+    });
 });
