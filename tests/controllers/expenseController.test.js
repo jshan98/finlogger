@@ -81,4 +81,22 @@ describe('Expense Controller', () => {
         // Checks that response body contains 'Expense created successfully'.
         expect(res.body.message).to.equal('Expense updated successfully.');
     });
+
+    // Test case for the update expense API if expense does not exist
+    it('Should return 404 if the expense to be updated is not found', async () => {
+        // Creates category for the expense.
+        const category = await ExpenseCategory.create({_id: "TRANSPORT", name: 'Transport'}); 
+        const res = await request(app)
+            .put('/expenses/60c72b2f9b1e8c4f8c56ab45')
+            .send({
+                description: 'Train',
+                amount: 15,
+                date: '2020-07-09',
+                categoryName: 'Transport'
+            });
+        // Validates API response.
+        expect(res.status).to.equal(404);
+        // Checks that response body contains 'Expense created successfully'.
+        expect(res.body.error).to.equal('Expense not found.');
+    });
 });
