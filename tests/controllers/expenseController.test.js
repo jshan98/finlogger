@@ -119,5 +119,25 @@ describe('Expense Controller', () => {
         expect(res.body.message).to.equal('Expense deleted successfully.');
     });
 
-    
+    // Test case for the get expenses API success
+    it('Should fetch expense details', async () => {
+        // Creates category for the expense.
+        const category = await ExpenseCategory.create({_id: "ENTERTAINMENT", name: 'Entertainment'}); 
+        const expense = await Expense.create({
+                user_id: 'USER_2',
+                description: 'Movie',
+                amount: 30,
+                date: '2020-06-12',
+                category_id: 'Entertainment'
+            });
+        const res = await request(app)
+            .get('/expenses')
+            .query({user_id: 'USER_2', date: '06-2020'});
+        // Validates API response.
+        expect(res.status).to.equal(200);
+        // Checks that response body has totalExpenses.
+        expect(res.body).to.have.property('totalExpenses');
+        // Checks that response body has expenses.
+        expect(res.body).to.have.property('expenses');
+    });
 });
