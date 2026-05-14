@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 // import { expenseData, expenseSummaryData as summaryData, expenseCategories as categoriesData } from '../data';
-import ToastNotification from "../components/ToastNotification";
+import ToastNotification from "../components/ToastNotification.js";
 
 // Create a new context for the app
 const AppContext = createContext();

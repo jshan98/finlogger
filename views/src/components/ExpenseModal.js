@@ -1,8 +1,8 @@
 // import { expenseCategories } from "../data";
-import { useExpenseModal } from "../context/ExpenseModalContext";
+import { useExpenseModal } from "../context/ExpenseModalContext.js";
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useState } from "react";
-import { useAppContext } from '../context/AppContext';
+import { useAppContext } from '../context/AppContext.js';
 
 /**
  * Function: ExpensesModal

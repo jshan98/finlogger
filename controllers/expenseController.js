@@ -19,6 +19,10 @@ export const createExpense = (req, res) => {
     .then(category => {
         if(!category) {
             return res.status(404).json({error: 'Category not found.'});
+        } 
+        // Checks that all required objects are present in request body and returns status code 400 if not
+        if (Object.keys(req.body).length < 5){
+            return res.status(400).json({error: 'Validation Failed.'});
         }
 
         // Creates the new expense

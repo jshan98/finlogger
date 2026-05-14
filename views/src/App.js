@@ -1,13 +1,13 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import Header from './components/Header';
-import Overview from './components/Overview';
-import ExpenseSummary from './components/ExpenseSummary';
-import ExpenseDetails from './components/ExpenseDetails';
-import { ExpenseModalProvider } from './context/ExpenseModalContext';
+import Header from './components/Header.js';
+import Overview from './components/Overview.js';
+import ExpenseSummary from './components/ExpenseSummary.js';
+import ExpenseDetails from './components/ExpenseDetails.js';
+import { ExpenseModalProvider } from './context/ExpenseModalContext.js';
 import { Container, Row } from 'react-bootstrap';
 // import { user } from "./data";
-import { AppProvider, useAppContext } from './context/AppContext';
+import { AppProvider, useAppContext } from './context/AppContext.js';
 
 /**
  * Function: AppContent
