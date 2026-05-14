@@ -1,6 +1,6 @@
-import OverviewCard from "./OverviewCard";
+import OverviewCard from "./OverviewCard.js";
 import {Button, Row,  Col, Form} from 'react-bootstrap';
-import {useExpenseModal} from '../context/ExpenseModalContext';
+import {useExpenseModal} from '../context/ExpenseModalContext.js';
 
 function Overview({month, handleMonthChange, totalExpenses, userIncome}) {
     const { handleShow } = useExpenseModal();

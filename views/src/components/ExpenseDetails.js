@@ -1,7 +1,7 @@
 import { Table, Col } from "react-bootstrap";
-import DeleteConfirmationModal from './DeleteConfirmationModal';
-import { useExpenseModal } from "../context/ExpenseModalContext";
-import { useAppContext } from "../context/AppContext";
+import DeleteConfirmationModal from './DeleteConfirmationModal.js';
+import { useExpenseModal } from "../context/ExpenseModalContext.js";
+import { useAppContext } from "../context/AppContext.js";
 import { useState } from "react";
 
 /**

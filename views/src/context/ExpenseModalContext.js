@@ -1,7 +1,7 @@
 // ExpenseModalContext.js
 
 import { createContext, useContext, useState } from "react";
-import ExpenseModal from '../components/ExpenseModal';
+import ExpenseModal from '../components/ExpenseModal.js';
 
 const ExpenseModalContext = createContext();
 
