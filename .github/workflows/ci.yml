@@ -3,7 +3,7 @@
 # Trigger the workflow on push or pull request to the main branch
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "workflow-set-up"]
   pull_request:
     branches: [ "master" ]
 
