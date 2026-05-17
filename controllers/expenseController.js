@@ -154,7 +154,7 @@ export const getExpenses = (req, res) => {
             $match: {
                  ...dateFilter,
                  ...userFilter,
-                 active: true // Only fetches documents that are active
+                 active: true // Only fetches documents that are active when getting expenses
             },
         },
         {
@@ -226,6 +226,7 @@ export const getExpenseSummary = (req, res) => {
             $match: {
                  ...userFilter,
                  ...dateFilter,
+                 active: true // Only fetches documents that are active when getting the expense summary
             },
         },
         {
