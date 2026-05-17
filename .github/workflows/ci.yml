@@ -1,0 +1,33 @@
+﻿name: Finlogger CI
+
+# Trigger the workflow on push or pull request to the main branch
+on:
+  push:
+      branches:
+        - master
+  pull_request:
+      branches:
+        - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js (Note to self: Be sure to specify the node.js version!)
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+            node-version: '25.x'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm run install:all
+
+      # Step 4: Run tests
+      - name: Run tests
+        run: npm run test:all -- --watchAll=false
