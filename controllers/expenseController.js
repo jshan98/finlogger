@@ -101,7 +101,7 @@ export const updateExpense = (req, res) => {
  * Returns: If the expense to be deleted does not exist then returns the appropriate error and status codes.
  */
 export const deleteExpense = (req, res) => {
-    Expense.findByIdAndDelete(req.params.id)
+    Expense.findByIdAndUpdate(req.params.id, {active: false}, {new: true})
     .then(expense => {
         // If the category does not then returns status code 400 with error message
         if(!expense) {
@@ -153,7 +153,8 @@ export const getExpenses = (req, res) => {
         {
             $match: {
                  ...dateFilter,
-                 ...userFilter
+                 ...userFilter,
+                 active: true // Only fetches documents that are active when getting expenses
             },
         },
         {
@@ -225,6 +226,7 @@ export const getExpenseSummary = (req, res) => {
             $match: {
                  ...userFilter,
                  ...dateFilter,
+                 active: true // Only fetches documents that are active when getting the expense summary
             },
         },
         {
