@@ -16,7 +16,7 @@ export const AppProvider = ({ children }) => {
     const [expenseIdToBeDeleted, setExpenseIdToBeDeleted] = useState(null);
 
     // Sets the state variable that controls the toast notification
-    const [toast, setToast] = useState({show: false, message: ""});
+    const [toast, setToast] = useState({show: false, message: " "});
 
     // Function to show toast notification
     const showToast = (message) => {
@@ -26,7 +26,7 @@ export const AppProvider = ({ children }) => {
 
     // Function to hide toast notification
     const hideToast = () => {
-        setToast({show: false, message: ""});
+        setToast({show: false, message: " "});
         console.log(`Toast hidden - Show: ${toast.show}`);
     };
 
@@ -106,6 +106,8 @@ export const AppProvider = ({ children }) => {
         fetchExpenseCategories();
     }, []);
 
+    console.log(`${toast.show} - ${toast.message}`);
+
     return (
         <AppContext.Provider
             value={{
@@ -119,10 +121,12 @@ export const AppProvider = ({ children }) => {
                 setExpenseIdToBeDeleted,
                 fetchExpenseData,
                 showToast,
+                hideToast,
+                toast,
             }} >
             {children}
             {/* Renders the Toast Notification component */}
-            <ToastNotification show={toast.show} message={toast.message} onClose={(hideToast)} />
+            <ToastNotification/>
         </AppContext.Provider>
     );
 };
